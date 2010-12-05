@@ -150,15 +150,7 @@ class Base(db.Model):
 
 class SearchableBase(search.Searchable, Base):
     """A base class for searchable objects."""
-
-    def put(self, enqueue=False):
-        """Put the searchable value, queuing the index for later or doing it immediately (default)."""
-        Base.put(self)
-        if enqueue:
-            # TODO: Determine URL of LiteralIndexing handler.
-            self.enqueue_indexing('/foo/bar')
-        else:
-            self.index()
+    pass
 
 # All fields are either required, or have a default value.  For property
 # types that have a false value, the default is the false value.  For types

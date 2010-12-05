@@ -160,21 +160,23 @@ class ModelTests(unittest.TestCase):
         assert model.Note.get('haiti', self.n1_2.record_id).record_id == \
             self.n1_2.record_id
 
-    def test_search_all_returns_existing(self):
-        results = model.Person.search('smith')
-        assert 1 == len(results)
-        assert 'smith' == results[0].last_name
+    def update_indexes(self):
+        """Need to do this as indexes are updated through a handler."""
+        [p.update_index([]) for p in (self.p1, self.p2)]
 
     def test_search_by_subdomain_returns_existing(self):
+        self.update_indexes()
         results = model.Person.search('smith', subdomain='haiti')
         assert 1 == len(results)
-        assert 'smith' == results[0].last_name
+        assert 'smith' == results[0].last_name.lower()
 
     def test_search_by_subdomain_returns_with_no_matching_returns_no_results(self):
+        self.update_indexes()
         results = model.Person.search('jones', subdomain='haiti')
         assert 0 == len(results)
 
     def test_search_nonexistent_subdomain_returns_no_results(self):
+        self.update_indexes()
         results = model.Person.search('smith', subdomain='dsadas')
         assert 0 == len(results)
 
