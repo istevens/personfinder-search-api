@@ -421,7 +421,7 @@ class Searchable(object):
             logging.debug("key_list: %s", key_list)
             return key_list
         else:
-            subdomain = domain or ""
+            subdomain = subdomain or ""
             keys = [key.name().split(":")[-1] for key, title in key_list]
             valid_keys = [key for key in keys if key.startswith(subdomain)]
             results = [cls.get(subdomain, key) for key in valid_keys]

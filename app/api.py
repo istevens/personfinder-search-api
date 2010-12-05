@@ -122,10 +122,10 @@ class Search(utils.Handler):
         subdomain = self.request.get("subdomain")
         
         # backend not ready yet, so use a hardcoded stub instead
-        records = model.Person.search(query_string, domain=subdomain)
+        records = model.Person.search(query_string, subdomain=subdomain)
         
         # format to PFIF
-        records = [pfif_version.person_to_dict(p) for p in records]]
+        records = [pfif_version.person_to_dict(p) for p in records]
         pfif_version.write_file(self.response.out, records)
 
 if __name__ == '__main__':
