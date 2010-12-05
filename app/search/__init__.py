@@ -421,7 +421,12 @@ class Searchable(object):
             logging.debug("key_list: %s", key_list)
             return key_list
         else:
-            return [cls.get(key_and_title[0]) for key_and_title in key_list]
+            subdomain = domain or ""
+            keys = [key.name().split(":")[-1] for key, title in key_list]
+            valid_keys = [key for key in keys if key.startswith(subdomain)]
+            results = [cls.get(subdomain, key) for key in valid_keys]
+            valid_results = [result for result in results if result is not None]
+            return valid_results
 
     def indexed_title_changed(self):
         """Renames index entities for this model to match new title."""

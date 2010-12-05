@@ -121,7 +121,7 @@ class Base(db.Model):
     @classmethod
     def get(cls, subdomain, record_id):
         """Gets the entity with the given record_id in a given repository."""
-        return cls.get_by_key_name(subdomain + ':' + record_id)
+        return cls.get_by_key_name(subdomain + ':' + str(record_id))
 
     @classmethod
     def create_original(cls, subdomain, **kwargs):
@@ -214,6 +214,7 @@ class Person(SearchableBase):
     names_prefixes = db.StringListProperty()
     _fields_to_index_properties = ['first_name', 'last_name']
     _fields_to_index_by_prefix_properties = ['first_name', 'last_name']
+    search.Searchable.INDEX_ONLY = ['first_name', 'last_name']
 
     def get_person_record_id(self):
         return self.record_id
@@ -255,6 +256,8 @@ class Person(SearchableBase):
         # setup old indexing
         if 'old' in which_indexing:
             prefix.update_prefix_properties(self)
+        # index for full text search
+        self.index()
 
 #old indexing
 prefix.add_prefix_properties(

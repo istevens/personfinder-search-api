@@ -122,13 +122,11 @@ class Search(utils.Handler):
         subdomain = self.request.get("subdomain")
         
         # backend not ready yet, so use a hardcoded stub instead
-        #records = model.Person.search(query_string, domain=subdomain)
-        person = model.Person.get("haiti","haiti.person-finder.appspot.com/person.5")
+        records = model.Person.search(query_string, domain=subdomain)
         
         # format to PFIF
-        records = [pfif_version.person_to_dict(person)]
-        pfif_version.write_file(
-            self.response.out, records)
+        records = [pfif_version.person_to_dict(p) for p in records]]
+        pfif_version.write_file(self.response.out, records)
 
 if __name__ == '__main__':
     utils.run(('/api/read', Read), ('/api/write', Write), ('/api/search', Search))
